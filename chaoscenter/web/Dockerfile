@@ -2,9 +2,8 @@ FROM registry.access.redhat.com/ubi10/ubi-minimal:10.1
 
 # apply latest patches
 RUN microdnf update --nodocs \
-&& microdnf module enable nginx:1.20 \
-&& microdnf install --nodocs nginx \
-&& microdnf clean all
+    && microdnf install --nodocs nginx \
+    && microdnf clean all
     
 COPY dist /opt/chaos
 COPY nginx/nginx.conf /etc/nginx/
