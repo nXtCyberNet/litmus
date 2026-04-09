@@ -753,6 +753,10 @@ func (p *probeService) GenerateExperimentManifestWithProbes(manifest string, pro
 					meta       v1alpha1.ChaosEngine
 					annotation = make(map[string]string)
 					probes     []v1alpha1.ProbeAttributes
+					httpProbe  HTTPProbeAttributes
+					cmdProbe   CMDProbeAttributes
+					promProbe  PROMProbeAttributes
+					k8sProbe   K8SProbeAttributes
 				)
 
 				err := yaml.Unmarshal([]byte(data), &meta)
@@ -785,7 +789,6 @@ func (p *probeService) GenerateExperimentManifestWithProbes(manifest string, pro
 								}
 
 								if model.ProbeType(probe.Type) == model.ProbeTypeHTTPProbe {
-									var httpProbe HTTPProbeAttributes
 									err := json.Unmarshal([]byte(probeManifestString), &httpProbe)
 									if err != nil {
 										return argoTypes.Workflow{}, fmt.Errorf("failed to unmarshal http probe, error: %s", err.Error())
@@ -803,7 +806,6 @@ func (p *probeService) GenerateExperimentManifestWithProbes(manifest string, pro
 										Mode:          httpProbe.Mode,
 									})
 								} else if model.ProbeType(probe.Type) == model.ProbeTypeCmdProbe {
-									var cmdProbe CMDProbeAttributes
 									err := json.Unmarshal([]byte(probeManifestString), &cmdProbe)
 									if err != nil {
 										return argoTypes.Workflow{}, fmt.Errorf("failed to unmarshal cmd probe, error: %s", err.Error())
@@ -821,7 +823,6 @@ func (p *probeService) GenerateExperimentManifestWithProbes(manifest string, pro
 										Mode:          cmdProbe.Mode,
 									})
 								} else if model.ProbeType(probe.Type) == model.ProbeTypePromProbe {
-									var promProbe PROMProbeAttributes
 									err := json.Unmarshal([]byte(probeManifestString), &promProbe)
 									if err != nil {
 										return argoTypes.Workflow{}, fmt.Errorf("failed to unmarshal prom probe, error: %s", err.Error())
@@ -840,7 +841,6 @@ func (p *probeService) GenerateExperimentManifestWithProbes(manifest string, pro
 										Mode:          promProbe.Mode,
 									})
 								} else if model.ProbeType(probe.Type) == model.ProbeTypeK8sProbe {
-									var k8sProbe K8SProbeAttributes
 									err := json.Unmarshal([]byte(probeManifestString), &k8sProbe)
 									if err != nil {
 										return argoTypes.Workflow{}, fmt.Errorf("failed to unmarshal k8s probe, error: %s", err.Error())
@@ -911,6 +911,10 @@ func (p *probeService) GenerateCronExperimentManifestWithProbes(manifest string,
 					meta       v1alpha1.ChaosEngine
 					annotation = make(map[string]string)
 					probes     []v1alpha1.ProbeAttributes
+					httpProbe  HTTPProbeAttributes
+					cmdProbe   CMDProbeAttributes
+					promProbe  PROMProbeAttributes
+					k8sProbe   K8SProbeAttributes
 				)
 
 				if err := yaml.Unmarshal([]byte(data), &meta); err != nil {
@@ -940,7 +944,6 @@ func (p *probeService) GenerateCronExperimentManifestWithProbes(manifest string,
 							probeManifestString, err := p.GenerateProbeManifest(probe.GetOutputProbe(), annotationKey.Mode)
 
 							if model.ProbeType(probe.Type) == model.ProbeTypeHTTPProbe {
-								var httpProbe HTTPProbeAttributes
 								if err := json.Unmarshal([]byte(probeManifestString), &httpProbe); err != nil {
 									return argoTypes.CronWorkflow{}, fmt.Errorf("failed to unmarshal http probe, error: %s", err.Error())
 								}
@@ -957,7 +960,6 @@ func (p *probeService) GenerateCronExperimentManifestWithProbes(manifest string,
 									Mode:          httpProbe.Mode,
 								})
 							} else if model.ProbeType(probe.Type) == model.ProbeTypeCmdProbe {
-								var cmdProbe CMDProbeAttributes
 								if err := json.Unmarshal([]byte(probeManifestString), &cmdProbe); err != nil {
 									return argoTypes.CronWorkflow{}, fmt.Errorf("failed to unmarshal cmd probe, error: %s", err.Error())
 								}
@@ -974,7 +976,6 @@ func (p *probeService) GenerateCronExperimentManifestWithProbes(manifest string,
 									Mode:          cmdProbe.Mode,
 								})
 							} else if model.ProbeType(probe.Type) == model.ProbeTypePromProbe {
-								var promProbe PROMProbeAttributes
 								if err := json.Unmarshal([]byte(probeManifestString), &promProbe); err != nil {
 									return argoTypes.CronWorkflow{}, fmt.Errorf("failed to unmarshal prom probe, error: %s", err.Error())
 								}
@@ -992,7 +993,6 @@ func (p *probeService) GenerateCronExperimentManifestWithProbes(manifest string,
 									Mode:          promProbe.Mode,
 								})
 							} else if model.ProbeType(probe.Type) == model.ProbeTypeK8sProbe {
-								var k8sProbe K8SProbeAttributes
 								if err := json.Unmarshal([]byte(probeManifestString), &k8sProbe); err != nil {
 									return argoTypes.CronWorkflow{}, fmt.Errorf("failed to unmarshal k8s probe, error: %s", err.Error())
 								}
